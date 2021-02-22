@@ -14,6 +14,9 @@ $ sudo apt-get install libgmp3-dev
 
 ## Running the tests
 ```
+$ ./run.sh cpubench
+$ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
+
 ```
 
 ## Acknowledgments
