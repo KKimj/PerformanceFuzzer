@@ -1,2 +1,7 @@
-
 /.vs
+
+
+/tests/*
+!/tests/*.c
+!/tests/*.cpp
+
