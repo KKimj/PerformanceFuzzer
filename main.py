@@ -10,12 +10,24 @@ def main(filename_list, option_list):
     file_opt_ll = open("./tests/"+filename_list[0]+"_opt.ll", "r")
     file_fuz_ll = open("./tests/"+filename_list[0]+"_opt_fuzzer.ll", "w")
     
+    insert_flag = False
+
     while True:
         line = file_opt_ll.readline()
         file_fuz_ll.write(line)
         if not line:
             break
-        if line.startswith("; <label>") and nop_count > 0:
+
+        if insert_flag and len(line) < 0:
+            insert_flag = False
+
+        if insert_flag and line.startswith("}"):
+            insert_flag = False
+
+        if not insert_flag and line.startswith("; <label>") and nop_count > 0:
+            insert_flag = True
+        
+        if insert_flag and nop_count > 0:
             file_fuz_ll.write('  call void asm sideeffect "NOP;", ""()\n')
             nop_count -= 1
             
