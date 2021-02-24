@@ -22,5 +22,6 @@ $ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
 
 ## Acknowledgments
 https://github.com/theblixguy/CPUBench
+
 https://pypi.org/project/pytest-benchmark/
 
