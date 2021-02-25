@@ -1,5 +1,22 @@
 import argparse
 
+class PerformanceFuzzer:
+    def __init__(self):
+        pass
+
+    def NOP(self):
+        pass
+
+    def load(self):
+        pass
+
+    def insert(self):
+        pass
+    
+
+    pass
+
+
 
 def main(filename_list, option_list):
     # print('Target File : {}'.format(filename_list))
