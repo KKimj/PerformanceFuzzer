@@ -1,5 +1,6 @@
 import argparse
-import os.path
+import os
+
 class PerformanceFuzzer:
     def __init__(self, dirName, fileName = "main"):
         self.dirName = dirName
@@ -20,10 +21,11 @@ class PerformanceFuzzer:
             
 
     def Run(self):
-        pass
+        os.system(self.filePath)
 
     def Build(self):
-        pass
+        os.system("clang -S -emit-llvm "+ self.filePath+".c "+ " -o " + self.filePath+".ll")
+        os.system("opt -S -O3 -aa -basicaa -tbaa -licm "+self.filePath+".ll " +" -o "+self.filePath+"_opt.ll")
 
     def NOP(self):
         return '  call void asm sideeffect "NOP;", ""()\n'
@@ -60,7 +62,9 @@ class PerformanceFuzzer:
         file_opt_ll.close()
         file_fuz_ll.close()
 
-
+        os.system("llc "+self.filePath+"_opt_fuzzer.ll"+" -o " + self.filePath + "_opt_fuzzer.s")
+        os.system("clang "+ self.filePath+"_opt_fuzzer.s" + "-o " + self.filePath + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
+        os.system("objdump -D "+ self.filePath+ " > " + self.filePath +".dump")
 
 def main(filename_list, option_list):
     if len(filename_list) == 1:
