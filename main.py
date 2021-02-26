@@ -63,7 +63,7 @@ class PerformanceFuzzer:
         file_fuz_ll.close()
 
         os.system("llc "+self.filePath+"_opt_fuzzer.ll"+" -o " + self.filePath + "_opt_fuzzer.s")
-        os.system("clang "+ self.filePath+"_opt_fuzzer.s" + "-o " + self.filePath + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
+        os.system("clang "+ self.filePath+"_opt_fuzzer.s" + " -o " + self.filePath + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
         os.system("objdump -D "+ self.filePath+ " > " + self.filePath +".dump")
 
 def main(filename_list, option_list):
