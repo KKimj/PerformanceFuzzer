@@ -66,7 +66,7 @@ class PerformanceFuzzer:
         os.system("clang "+ self.filePath+"_opt_fuzzer.s" + " -o " + self.filePath + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
         os.system("objdump -D "+ self.filePath+ " > " + self.filePath +".dump")
 
-def main(filename_list, option_list):
+def main(filename_list, option_list, benchmark):
     if len(filename_list) == 1:
         performanceFuzzer = PerformanceFuzzer(filename_list[0])
     elif len(filename_list) == 2:
@@ -75,6 +75,7 @@ def main(filename_list, option_list):
     performanceFuzzer.Insert()
     performanceFuzzer.Run()
     print("Run success!")
+    result = benchmark(performanceFuzzer.Run())
 
 
 
