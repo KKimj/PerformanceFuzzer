@@ -16,7 +16,7 @@ class PerformanceFuzzer:
             quit()
 
         if os.path.isfile(self.filePath+"_opt.ll") == False:
-            print("Makefile!")
+            print("Build!")
             self.Build()
             
 
@@ -74,6 +74,7 @@ def main(filename_list, option_list):
 
     performanceFuzzer.Insert()
     performanceFuzzer.Run()
+    print("Run success!")
 
 
 
