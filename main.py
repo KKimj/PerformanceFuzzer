@@ -19,7 +19,7 @@ class PerformanceFuzzer:
             print("Build!")
             self.Build()
             
-
+    @staticmethod
     def Run(self):
         os.system(self.filePath+" 50000 --singlethreaded --printdigits")
 
@@ -66,16 +66,20 @@ class PerformanceFuzzer:
         os.system("clang "+ self.filePath+"_opt_fuzzer.s" + " -o " + self.filePath + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
         os.system("objdump -D "+ self.filePath+ " > " + self.filePath +".dump")
 
-def main(filename_list, option_list, benchmark):
+performanceFuzzer = None
+
+def tester(benchmark):
+    global performanceFuzzer
+    benchmark.pedantic(performanceFuzzer.Run, iterations=ITERATIONS, rounds=ROUNDS)
+
+def main(filename_list, option_list):
+    global performanceFuzzer
     if len(filename_list) == 1:
         performanceFuzzer = PerformanceFuzzer(filename_list[0])
     elif len(filename_list) == 2:
         performanceFuzzer = PerformanceFuzzer(filename_list[0], filename_list[1])
 
     performanceFuzzer.Insert()
-    performanceFuzzer.Run()
-    print("Run success!")
-    result = benchmark(performanceFuzzer.Run())
 
 
 
