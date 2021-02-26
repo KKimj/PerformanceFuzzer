@@ -21,7 +21,7 @@ class PerformanceFuzzer:
             
 
     def Run(self):
-        os.system(self.filePath)
+        os.system(self.filePath+" 50000 --singlethreaded --printdigits")
 
     def Build(self):
         os.system("clang -S -emit-llvm "+ self.filePath+".c "+ " -o " + self.filePath+".ll")
