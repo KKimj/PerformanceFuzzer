@@ -15,6 +15,20 @@ $ pip3 install pytest-benchmark
 $ pip3 install pygal
 ```
 
+### Using virtualenv
+```
+$ pip3 install virtualenv
+$ virtualenv venv
+$ python3 -m virtualenv venv
+$ source venv/bin/activate
+
+$ pip3 install pytest
+$ pip3 install pytest-benchmark
+$ pip3 install pygal
+
+$ deactivate
+```
+
 ## Running the tests
 ```
 $ ./run.sh cpubench
