@@ -19,9 +19,9 @@ class PerformanceFuzzer:
             print("Build!")
             self.Build()
             
-    @staticmethod
     def Run(self):
         os.system(self.filePath+" 50000 --singlethreaded --printdigits")
+        return True
 
     def Build(self):
         os.system("clang -S -emit-llvm "+ self.filePath+".c "+ " -o " + self.filePath+".ll")
@@ -70,7 +70,9 @@ performanceFuzzer = None
 
 def tester(benchmark):
     global performanceFuzzer
-    benchmark.pedantic(performanceFuzzer.Run, iterations=ITERATIONS, rounds=ROUNDS)
+
+    result = benchmark(performanceFuzzer.Run)
+    assert result == True
 
 def main(filename_list, option_list):
     global performanceFuzzer
