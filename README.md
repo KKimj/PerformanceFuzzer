@@ -10,7 +10,9 @@ $ git clone https://github.com/KKimj/PerformanceFuzzer
 ```
 $ sudo apt update && sudo apt upgrade
 $ sudo apt-get install libgmp3-dev
+$ pip3 install pytest
 $ pip3 install pytest-benchmark
+$ pip3 install pygal
 ```
 
 ## Running the tests
