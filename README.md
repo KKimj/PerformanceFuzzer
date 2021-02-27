@@ -33,7 +33,10 @@ $ deactivate
 ```
 $ ./run.sh cpubench
 $ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
+```
 
+```
+$ python3 -m pytest main.py
 ```
 
 ## Acknowledgments
