@@ -70,7 +70,7 @@ performanceFuzzer = None
 
 def tester(benchmark):
     global performanceFuzzer
-
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
