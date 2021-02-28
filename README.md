@@ -39,6 +39,10 @@ $ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
 $ python3 -m pytest main.py
 ```
 
+## Examples
+
+![Alt text](screenshots/screenshot1.PNG?raw=true "Title")
+
 ## Acknowledgments
 https://github.com/theblixguy/CPUBench
 
