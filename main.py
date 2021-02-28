@@ -48,9 +48,18 @@ class PerformanceFuzzer:
 
             if insert_flag and line.startswith("}"):
                 insert_flag = False
+            
+            if insert_flag and line.startswith("ret"):
+                insert_flag = False
+            
 
             if not insert_flag and line.startswith("; <label>") and nop_count > 0:
                 insert_flag = True
+
+            if not insert_flag and line.startswith("define internal fastcc i32") and line.endswith("{") and nop_count > 0:
+                insert_flag = True
+
+            
             
             if insert_flag and nop_count > 0:
                 file_fuz_ll.write('  call void asm sideeffect "NOP;", ""()\n')
