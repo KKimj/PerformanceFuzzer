@@ -67,8 +67,6 @@ class PerformanceFuzzer:
         os.system("clang "+ self.target+"_opt_fuzzer.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
         os.system("objdump -D "+ self.target + " > " + self.target + ".dump")
 
-performanceFuzzer = None
-
 def tester_original(benchmark):
     # global performanceFuzzer
     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
@@ -104,6 +102,15 @@ def tester_nop1000(benchmark):
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
+
+def tester_nop3000(benchmark):
+    # global performanceFuzzer
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "3000")
+    performanceFuzzer.Insert(nop_count = 3000)
+    result = benchmark(performanceFuzzer.Run)
+    assert result == True
+
+
 def tester_nop5000(benchmark):
     # global performanceFuzzer
     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "5000")
@@ -133,7 +140,6 @@ def tester_nop20000(benchmark):
     assert result == True
 
 def main(filename_list, option_list):
-    global performanceFuzzer
     if len(filename_list) == 1:
         performanceFuzzer = PerformanceFuzzer(filename_list[0])
     elif len(filename_list) == 2:
