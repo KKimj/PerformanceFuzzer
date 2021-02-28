@@ -36,7 +36,7 @@ $ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
 ```
 
 ```
-$ python3 -m pytest main.py
+$ python3 -m pytest main.py --benchmark-histogram
 ```
 
 ## Examples
