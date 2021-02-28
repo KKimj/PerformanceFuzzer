@@ -51,6 +51,9 @@ class PerformanceFuzzer:
             
             if insert_flag and line.strip().startswith("ret"):
                 insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
             
 
             if not insert_flag and line.startswith("define i32 @main") and line.endswith("{") and nop_count > 0:
