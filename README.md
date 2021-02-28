@@ -41,17 +41,10 @@ $ python3 -m pytest main.py --benchmark-histogram
 
 ## Examples
 
-![Alt text](screenshots/screenshot1.PNG?raw=true "Title")
+![Alt text](screenshots/screenshot7.PNG?raw=true "Title")
 
-![Alt text](screenshots/screenshot2.PNG?raw=true "Title")
+![Alt text](screenshots/screenshot8.PNG?raw=true "Title")
 
-![Alt text](screenshots/screenshot3.PNG?raw=true "Title")
-
-![Alt text](screenshots/screenshot4.PNG?raw=true "Title")
-
-![Alt text](screenshots/screenshot5.PNG?raw=true "Title")
-
-![Alt text](screenshots/screenshot6.PNG?raw=true "Title")
 
 
 
