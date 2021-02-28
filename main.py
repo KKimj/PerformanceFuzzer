@@ -21,7 +21,7 @@ class PerformanceFuzzer:
             self.Build()
             
     def Run(self):
-        os.system(self.filePath+" 50000 --singlethreaded --printdigits")
+        os.system(self.target+" 50000 --singlethreaded --printdigits")
         return True
 
     def Build(self):
