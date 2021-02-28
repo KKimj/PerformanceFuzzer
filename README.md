@@ -47,6 +47,8 @@ $ python3 -m pytest main.py
 
 ![Alt text](screenshots/screenshot3.PNG?raw=true "Title")
 
+![Alt text](screenshots/screenshot4.PNG?raw=true "Title")
+
 
 ## Acknowledgments
 https://github.com/theblixguy/CPUBench
