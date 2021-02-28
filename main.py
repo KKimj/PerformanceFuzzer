@@ -30,11 +30,11 @@ class PerformanceFuzzer:
     def NOP(self):
         return '  call void asm sideeffect "NOP;", ""()\n'
 
-    def Insert(self):    
+    def Insert(self, nop_count = 0):    
         file_opt_ll = open(self.filePath+"_opt.ll", "r")
         file_fuz_ll = open(self.filePath+"_opt_fuzzer.ll", "w")
         
-        nop_count = 1
+        
         
 
         insert_flag = False
@@ -68,10 +68,17 @@ class PerformanceFuzzer:
 
 performanceFuzzer = None
 
-def tester(benchmark):
+def tester_nop10(benchmark):
     global performanceFuzzer
     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
-    performanceFuzzer.Insert()
+    performanceFuzzer.Insert(nop_count = 10)
+    result = benchmark(performanceFuzzer.Run)
+    assert result == True
+
+def tester_nop100(benchmark):
+    global performanceFuzzer
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
+    performanceFuzzer.Insert(nop_count = 100)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
