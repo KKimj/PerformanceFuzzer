@@ -82,6 +82,20 @@ def tester_nop100(benchmark):
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
+def tester_nop500(benchmark):
+    global performanceFuzzer
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
+    performanceFuzzer.Insert(nop_count = 500)
+    result = benchmark(performanceFuzzer.Run)
+    assert result == True
+
+def tester_nop1000(benchmark):
+    global performanceFuzzer
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
+    performanceFuzzer.Insert(nop_count = 1000)
+    result = benchmark(performanceFuzzer.Run)
+    assert result == True
+
 def main(filename_list, option_list):
     global performanceFuzzer
     if len(filename_list) == 1:
