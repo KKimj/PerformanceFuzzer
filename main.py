@@ -71,7 +71,7 @@ performanceFuzzer = None
 
 def tester_original(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "10")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
     performanceFuzzer.Insert(nop_count = 0)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
@@ -107,7 +107,7 @@ def tester_nop1000(benchmark):
 def tester_nop5000(benchmark):
     # global performanceFuzzer
     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "5000")
-    performanceFuzzer.Insert(nop_count = 1000)
+    performanceFuzzer.Insert(nop_count = 5000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
