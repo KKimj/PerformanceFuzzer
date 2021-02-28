@@ -43,8 +43,8 @@ class PerformanceFuzzer:
             if not line:
                 break
 
-            if insert_flag and len(line) < 0:
-                insert_flag = False
+            if insert_flag and len(line.strip()) <= 0:
+                continue
 
             if insert_flag and line.startswith("}"):
                 insert_flag = False
