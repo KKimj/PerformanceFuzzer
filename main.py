@@ -35,10 +35,8 @@ class PerformanceFuzzer:
         file_opt_ll = open(self.filePath+"_opt.ll", "r")
         file_fuz_ll = open(self.target+"_opt_fuzzer.ll", "w")
         
-        
-        
-
         insert_flag = False
+        
         while True:
             line = file_opt_ll.readline()
             file_fuz_ll.write(line)
@@ -63,9 +61,12 @@ class PerformanceFuzzer:
         file_opt_ll.close()
         file_fuz_ll.close()
 
-        os.system("llc "+self.target+"_opt_fuzzer.ll"+" -o " + self.target + "_opt_fuzzer.s")
-        os.system("clang "+ self.target+"_opt_fuzzer.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
-        os.system("objdump -D "+ self.target + " > " + self.target + ".dump")
+        # os.system("llc "+self.target+"_opt_fuzzer.ll"+" -o " + self.target + "_opt_fuzzer.s")
+        # os.system("clang "+ self.target+"_opt_fuzzer.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
+        # os.system("objdump -D "+ self.target + " > " + self.target + ".dump")
+
+        os.system("llc "+self.target+"_opt_fuzzer.ll"+" -o " + self.target + "_opt_fuzzer.s" + " && " + "clang "+ self.target+"_opt_fuzzer.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
 
 def tester_original(benchmark):
     # global performanceFuzzer
@@ -76,28 +77,28 @@ def tester_original(benchmark):
 
 def tester_nop10(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "10")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "10")
     performanceFuzzer.Insert(nop_count = 10)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
 def tester_nop100(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "100")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "100")
     performanceFuzzer.Insert(nop_count = 100)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
 def tester_nop500(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "500")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "500")
     performanceFuzzer.Insert(nop_count = 500)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
 def tester_nop1000(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "1000")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "1000")
     performanceFuzzer.Insert(nop_count = 1000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
@@ -105,7 +106,7 @@ def tester_nop1000(benchmark):
 
 def tester_nop3000(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "3000")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "3000")
     performanceFuzzer.Insert(nop_count = 3000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
@@ -113,28 +114,28 @@ def tester_nop3000(benchmark):
 
 def tester_nop5000(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "5000")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "5000")
     performanceFuzzer.Insert(nop_count = 5000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
 def tester_nop7000(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "7000")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "7000")
     performanceFuzzer.Insert(nop_count = 7000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
 def tester_nop10000(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "10000")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "10000")
     performanceFuzzer.Insert(nop_count = 10000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
 
 def tester_nop20000(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", "20000")
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "20000")
     performanceFuzzer.Insert(nop_count = 20000)
     result = benchmark(performanceFuzzer.Run)
     assert result == True
