@@ -3,9 +3,27 @@ import os
 import time
 import numpy as np
 
+class BenchmarkTime:
+
+    def __init__(self):
+        self.min = None
+        self.max = None
+        self.prev = None
+    
+    def Update(self, _min, _max, _now): # def setTime ? 
+        self.min = _min
+        self.max = _max
+        self.prev = _now
+    
+    def isFaster(self, _min, _max, _now):
+        # TODO 1: would like to improve
+        if self.min > _min:
+            return True
+        return False
 
 class PerformanceFuzzer:
-    def __init__(self, dirName, fileName = "main", testName = ""):
+
+    def __init__(self, dirName, fileName = "main", testName = "0"):
         self.dirName = dirName
 
         if fileName.endswith('.c'):
@@ -22,6 +40,21 @@ class PerformanceFuzzer:
         if os.path.isfile(self.filePath+"_opt.ll") == False:
             print("Build!")
             self.Build()
+
+        self.warmup = 2
+        self.round = 10
+        self.time = BenchmarkTime()
+    
+    def updateSource(self): # TODO 3: What is the best name of method?
+        self.filePath = self.target
+
+    def setTarget(self, testName = "0"):
+        self.target = self.filePath + testName
+    
+    
+    def BenchmarkSetup(self, _warmup, _round):
+        self.warmup = _warmup
+        self.round = _round
             
     def Run(self):
         start = time.time()
@@ -29,6 +62,39 @@ class PerformanceFuzzer:
         self.time_now = time.time() - start
         return self.time_now
 
+    def Benchmark(self):
+        for i in range(self.warmup):
+            self.Run()
+        
+        _tmp = self.Run()
+
+        _avg = _tmp
+        _min = _tmp
+        _max = _tmp
+        
+        
+        for i in range(self.round - 1):
+            _tmp = self.Run()
+
+            _avg += _tmp
+
+            if _min > _tmp:
+                _min = _tmp
+            
+            if _max < _tmp:
+                _max = _tmp
+
+        _avg /= self.round
+        
+        if self.time.isFaster(_min, _max, _avg):
+            self.time.Update(_min, _max, _avg)
+            return True # TODO 2-1: Is it the right design?
+        else:
+            return False # TODO 2-2: Is it the right design?
+
+        
+
+    
     def Build(self):
         os.system("clang -S -emit-llvm "+ self.filePath+".c "+ " -o " + self.filePath+".ll")
         os.system("opt -S -O3 -aa -basicaa -tbaa -licm "+self.filePath+".ll " +" -o "+self.filePath+"_opt.ll")
@@ -38,7 +104,7 @@ class PerformanceFuzzer:
 
     def Insert(self, nop_count = 0):    
         file_opt_ll = open(self.filePath+"_opt.ll", "r")
-        file_fuz_ll = open(self.target+"_opt_fuzzer.ll", "w")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
         
         insert_flag = False
         
@@ -201,8 +267,15 @@ def main(filename_list, option_list):
 
     performanceFuzzer.Insert()
 
+    _improveCount = 0
     for i in range(10):
-        print(performanceFuzzer.Run())
+        if performanceFuzzer.Benchmark():
+            performanceFuzzer.updateSource()
+            _improveCount += 1
+            performanceFuzzer.setTarget(str(_improveCount))
+            performanceFuzzer.Insert(i*50)
+            print("improved! %f"%(performanceFuzzer.time.prev))
+            
 
 
 
