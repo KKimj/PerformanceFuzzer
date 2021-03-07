@@ -1,7 +1,7 @@
 import argparse
 import os
 import time
-import numpy as np
+import numpy
 
 class BenchmarkTime:
 
@@ -44,8 +44,8 @@ class PerformanceFuzzer:
             print("Build!")
             self.Build()
 
-        self.warmup = 2
-        self.round = 10
+        self.warmup = 0
+        self.round = 2
         self.time = BenchmarkTime()
     
     def updateSource(self): # TODO 3: What is the best name of method?
