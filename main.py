@@ -282,7 +282,7 @@ def main(filename_list, option_list):
             performanceFuzzer.Insert(i*50)
             print("improved! %f"%(performanceFuzzer.time.prev))
     
-    print("%f -> %f"%(performanceFuzzer.time.origin, performanceFuzzer.time.now))
+    print("%f -> %f"%(performanceFuzzer.time.origin, performanceFuzzer.time.prev))
 
 
 
