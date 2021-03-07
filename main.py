@@ -149,7 +149,7 @@ class PerformanceFuzzer:
         # os.system("clang "+ self.target+"_opt_fuzzer.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
         # os.system("objdump -D "+ self.target + " > " + self.target + ".dump")
 
-        os.system("llc "+self.target+"_opt_fuzzer.ll"+" -o " + self.target + "_opt_fuzzer.s" + " && " + "clang "+ self.target+"_opt_fuzzer.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
 
 
 def tester_original(benchmark):
