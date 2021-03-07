@@ -9,8 +9,11 @@ class BenchmarkTime:
         self.min = None
         self.max = None
         self.prev = None
+        self.origin = None
     
     def Update(self, _min, _max, _now): # def setTime ? 
+        if self.origin == None:
+            self.origin = _now
         self.min = _min
         self.max = _max
         self.prev = _now
@@ -278,7 +281,8 @@ def main(filename_list, option_list):
             performanceFuzzer.setTarget(str(_improveCount))
             performanceFuzzer.Insert(i*50)
             print("improved! %f"%(performanceFuzzer.time.prev))
-            
+    
+    print("%f -> %f"%(performanceFuzzer.time.origin, performanceFuzzer.time.now))
 
 
 
