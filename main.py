@@ -200,8 +200,9 @@ def main(filename_list, option_list):
         performanceFuzzer = PerformanceFuzzer(filename_list[0], filename_list[1])
 
     performanceFuzzer.Insert()
-    
-    print(performanceFuzzer.Run())
+
+    for i in range(10):
+        print(performanceFuzzer.Run())
 
 
 
