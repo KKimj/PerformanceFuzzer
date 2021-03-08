@@ -39,6 +39,10 @@ $ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
 $ python3 -m pytest main.py --benchmark-histogram
 ```
 
+```
+$ sudo python3 main.py cpubench cpubench
+```
+
 ## Examples
 
 ![Alt text](screenshots/screenshot7.PNG?raw=true "Title")
