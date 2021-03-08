@@ -37,6 +37,8 @@ class PerformanceFuzzer:
         self.fileName = fileName
 
         self.filePath = "./tests/"+self.dirName+"/"+self.fileName
+        
+        self.source = self.filePath
         self.target = self.filePath + testName
 
         if os.path.isfile(self.filePath+".c") == False:
@@ -52,7 +54,9 @@ class PerformanceFuzzer:
         self.time = BenchmarkTime()
     
     def updateSource(self): # TODO 3: What is the best name of method?
-        self.filePath = self.target
+        os.system('cp '+self.target+'_opt.ll '+self.filePath+'_final.ll')
+        os.system('cp '+self.target+' '+self.filePath+'_final')
+        self.source = self.target
 
     def setTarget(self, testName = "0"):
         self.target = self.filePath + testName
@@ -109,7 +113,7 @@ class PerformanceFuzzer:
         return '  call void asm sideeffect "NOP;", ""()\n'
 
     def Insert(self, nop_count = 0):    
-        file_opt_ll = open(self.filePath+"_opt.ll", "r")
+        file_opt_ll = open(self.source+"_opt.ll", "r")
         file_fuz_ll = open(self.target+"_opt.ll", "w")
         
         insert_flag = False
@@ -282,7 +286,7 @@ def main(filename_list, option_list):
             performanceFuzzer.Insert(i*50)
             print("improved! %f"%(performanceFuzzer.time.prev))
     
-    print("%f -> %f"%(performanceFuzzer.time.origin, performanceFuzzer.time.prev))
+    print("%f -> %f : avgtime %f  %f%% faster nop count : %d"%(performanceFuzzer.time.origin, performanceFuzzer.time.min, performanceFuzzer.time.prev, (performanceFuzzer.time.origin-performanceFuzzer.time.min)/performanceFuzzer.time.origin*100, _nop_count))
 
 
 
