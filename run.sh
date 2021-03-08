@@ -15,4 +15,4 @@ sudo python3 -m pytest main.py --benchmark-histogram
 # llc tests/$1_opt_fuzzer.ll
 # clang tests/$1_opt_fuzzer.s -o tests/$1_fuzzer -fopenmp=libiomp5 -lgmp -lssl -lcrypto
 # objdump -D tests/$1_fuzzer > tests/$1_fuzzer.dump
-fi
+# fi

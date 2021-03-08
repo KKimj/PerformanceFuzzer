@@ -29,7 +29,7 @@ class BenchmarkTime:
 
 class PerformanceFuzzer:
 
-    def __init__(self, dirName, fileName = "main", testName = "0"):
+    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000):
         self.dirName = dirName
 
         if fileName.endswith('.c'):
@@ -49,8 +49,9 @@ class PerformanceFuzzer:
             print("Build!")
             self.Build()
 
-        self.warmup = 0
-        self.round = 2
+        self.warmup = _warmup
+        self.round = _round
+        self.cpubench_arg = " "+str(_cpubench_arg) + " --singlethreaded --printdigits"
         self.time = BenchmarkTime()
     
     def updateSource(self): # TODO 3: What is the best name of method?
@@ -62,18 +63,19 @@ class PerformanceFuzzer:
         self.target = self.filePath + testName
     
     
-    def BenchmarkSetup(self, _warmup, _round):
+    def BenchmarkSetup(self, _warmup, _round, _cpubench_arg):
         self.warmup = _warmup
         self.round = _round
+        self.cpubench_arg = " "+str(_cpubench_arg) + " --singlethreaded --printdigits"
             
     def Run(self, isOriginal = False, isFinal = False):
         start = time.time()
         if isOriginal:
-            os.system(self.filePath+" 50000 --singlethreaded --printdigits")
+            os.system(self.filePath+self.cpubench_arg)
         elif isFinal:
-            os.system(self.filePath+"_final"+" 50000 --singlethreaded --printdigits")
+            os.system(self.filePath+"_final"+self.cpubench_arg)
         else:
-            os.system(self.target+" 50000 --singlethreaded --printdigits")
+            os.system(self.target+self.cpubench_arg)
         self.time_now = time.time() - start
         return self.time_now
 
@@ -279,12 +281,13 @@ def tester_final(benchmark):
 #     result = benchmark(performanceFuzzer.Run)
 #     assert result > 2
 
-def main(filename_list, option_list):
+def main(filename_list, _warmup, _round, _cpubench_arg):
     if len(filename_list) == 1:
         performanceFuzzer = PerformanceFuzzer(filename_list[0])
     elif len(filename_list) == 2:
         performanceFuzzer = PerformanceFuzzer(filename_list[0], filename_list[1])
 
+    performanceFuzzer.BenchmarkSetup(_warmup, _round, _cpubench_arg)
     performanceFuzzer.Insert()
 
     _nop_count = 0
@@ -307,14 +310,20 @@ def main(filename_list, option_list):
 def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(nargs='+' ,help='Example) index.html', dest='filename')
-    parser.add_argument('--optional', '-o', nargs='*', help='Example) save', default=[], dest='option')
+
+    parser.add_argument('--warmup', '-w', nargs=None, type=int , default = 1, help='warmup before benchmark')
+    parser.add_argument('--round', '-r', nargs=None, type=int, default = 4, help='number of running test')
+    parser.add_argument('--cpubench', '-cpu', nargs=None, type=int, default = 50000, help='argument for cpubench')
+
 
     filename_list = parser.parse_args().filename
-    option_list = parser.parse_args().option
+    _warmup = parser.parse_args().warmup
+    _round = parser.parse_args().round
+    _cpubench_arg = parser.parse_args().cpubench
 
-    return filename_list, option_list
+    return filename_list, _warmup, _round, _cpubench_arg
 
 
 if __name__ == '__main__':
-    filename_list, option_list = get_arguments()
-    main(filename_list, option_list)
+    filename_list, _warmup, _round, _cpubench_arg = get_arguments()
+    main(filename_list, _warmup, _round, _cpubench_arg)
