@@ -66,9 +66,14 @@ class PerformanceFuzzer:
         self.warmup = _warmup
         self.round = _round
             
-    def Run(self):
+    def Run(self, isOriginal = False, isFinal = False):
         start = time.time()
-        os.system(self.target+" 50000 --singlethreaded --printdigits")
+        if isOriginal:
+            os.system(self.filePath+" 50000 --singlethreaded --printdigits")
+        elif isFinal:
+            os.system(self.filePath+"_final"+" 50000 --singlethreaded --printdigits")
+        else:
+            os.system(self.target+" 50000 --singlethreaded --printdigits")
         self.time_now = time.time() - start
         return self.time_now
 
@@ -101,13 +106,13 @@ class PerformanceFuzzer:
             return True # TODO 2-1: Is it the right design?
         else:
             return False # TODO 2-2: Is it the right design?
-
-        
-
     
     def Build(self):
         os.system("clang -S -emit-llvm "+ self.filePath+".c "+ " -o " + self.filePath+".ll")
         os.system("opt -S -O3 -aa -basicaa -tbaa -licm "+self.filePath+".ll " +" -o "+self.filePath+"_opt.ll")
+        os.system("clang "+ self.filePath+"_opt.s" + " -o " + self.filePath + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto")
+        os.system("objdump -D "+ self.filePath + " > " + self.filePath + ".dump")
+
 
     def NOP(self):
         return '  call void asm sideeffect "NOP;", ""()\n'
@@ -165,58 +170,63 @@ class PerformanceFuzzer:
 def tester_original(benchmark):
     # global performanceFuzzer
     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
-    performanceFuzzer.Insert(nop_count = 0)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+    result = benchmark(performanceFuzzer.Run, isOriginal = True)
+    assert result != 0
 
-def tester_nop10(benchmark):
+def tester_final(benchmark):
     # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "10")
-    performanceFuzzer.Insert(nop_count = 10)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench")
+    result = benchmark(performanceFuzzer.Run, isFinal = True)
+    assert result != 0
 
-def tester_nop50(benchmark):
-    # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "50")
-    performanceFuzzer.Insert(nop_count = 50)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+# def tester_nop10(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "10")
+#     performanceFuzzer.Insert(nop_count = 10)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
 
-def tester_nop100(benchmark):
-    # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "100")
-    performanceFuzzer.Insert(nop_count = 100)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+# def tester_nop50(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "50")
+#     performanceFuzzer.Insert(nop_count = 50)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
 
-def tester_nop150(benchmark):
-    # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "150")
-    performanceFuzzer.Insert(nop_count = 150)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+# def tester_nop100(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "100")
+#     performanceFuzzer.Insert(nop_count = 100)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
 
-def tester_nop200(benchmark):
-    # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "200")
-    performanceFuzzer.Insert(nop_count = 200)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+# def tester_nop150(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "150")
+#     performanceFuzzer.Insert(nop_count = 150)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
 
-def tester_nop250(benchmark):
-    # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "250")
-    performanceFuzzer.Insert(nop_count = 250)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+# def tester_nop200(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "200")
+#     performanceFuzzer.Insert(nop_count = 200)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
 
-def tester_nop290(benchmark):
-    # global performanceFuzzer
-    performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "290")
-    performanceFuzzer.Insert(nop_count = 290)
-    result = benchmark(performanceFuzzer.Run)
-    assert result > 2
+# def tester_nop250(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "250")
+#     performanceFuzzer.Insert(nop_count = 250)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
+
+# def tester_nop290(benchmark):
+#     # global performanceFuzzer
+#     performanceFuzzer = PerformanceFuzzer("cpubench", "cpubench", testName = "290")
+#     performanceFuzzer.Insert(nop_count = 290)
+#     result = benchmark(performanceFuzzer.Run)
+#     assert result > 2
 
 # def tester_nop500(benchmark):
 #     # global performanceFuzzer
@@ -277,13 +287,17 @@ def main(filename_list, option_list):
 
     performanceFuzzer.Insert()
 
+    _nop_count = 0
     _improveCount = 0
     for i in range(10):
         if performanceFuzzer.Benchmark():
             performanceFuzzer.updateSource()
             _improveCount += 1
             performanceFuzzer.setTarget(str(_improveCount))
-            performanceFuzzer.Insert(i*50)
+            
+            _nop_count = i*50
+            performanceFuzzer.Insert(_nop_count)
+
             print("improved! %f"%(performanceFuzzer.time.prev))
     
     print("%f -> %f : avgtime %f  %f%% faster nop count : %d"%(performanceFuzzer.time.origin, performanceFuzzer.time.min, performanceFuzzer.time.prev, (performanceFuzzer.time.origin-performanceFuzzer.time.min)/performanceFuzzer.time.origin*100, _nop_count))
