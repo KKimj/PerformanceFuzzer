@@ -175,10 +175,12 @@ class PerformanceFuzzer:
                 insert_flag = False
             
 
-            if not insert_flag and line.strip().startswith("define i32 @main") and line.strip().endswith("{"):
+            # if not insert_flag and line.strip().startswith("define i32 @main") and line.strip().endswith("{"):
+            if not insert_flag and line.strip().startswith("define i32 @main"):
                 insert_flag = True
 
-            if not insert_flag and line.strip().startswith("define internal fastcc i32") and line.strip().endswith("{"):
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32") and line.strip().endswith("{"):
+            if not insert_flag and line.strip().startswith("define internal fastcc i32"):
                 insert_flag = True
 
             if not insert_flag and line.strip().startswith("; <label>"):
