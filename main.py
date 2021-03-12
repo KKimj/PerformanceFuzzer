@@ -175,13 +175,13 @@ class PerformanceFuzzer:
                 insert_flag = False
             
 
-            if not insert_flag and line.startswith("define i32 @main") and line.endswith("{"):
+            if not insert_flag and line.strip().startswith("define i32 @main") and line.strip().endswith("{"):
                 insert_flag = True
 
-            if not insert_flag and line.startswith("define internal fastcc i32") and line.endswith("{"):
+            if not insert_flag and line.strip().startswith("define internal fastcc i32") and line.strip().endswith("{"):
                 insert_flag = True
 
-            if not insert_flag and line.startswith("; <label>"):
+            if not insert_flag and line.strip().startswith("; <label>"):
                 insert_flag = True
             
             if insert_flag and nop_count > 0 and numpy.random.choice(numpy.arange(1, 7), p=[0.1, 0.05, 0.05, 0.2, 0.4, 0.2]):
