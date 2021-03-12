@@ -28,6 +28,38 @@ class BenchmarkTime:
         return False
 
 class PerformanceFuzzer:
+    InsertPolicy = [
+        Insert_Program_Begin,
+        Insert_Program_Last,
+        Insert_Program_Random,
+        Insert_Lable_Begin,
+        Insert_Lable_Last,
+        Insert_Lable_Random ]
+
+    @staticmethod
+    def Insert_Program_Begin():
+        pass
+    
+    @staticmethod
+    def Insert_Program_Last():
+        pass
+    
+    @staticmethod
+    def Insert_Program_Random():
+        pass
+    
+    @staticmethod
+    def Insert_Lable_Begin():
+        pass
+    
+    @staticmethod
+    def Insert_Lable_Last():
+        pass
+    
+    @staticmethod
+    def Insert_Lable_Random():
+        pass
+    
 
     def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000):
         self.dirName = dirName
