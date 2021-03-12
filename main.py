@@ -304,6 +304,7 @@ def main(filename_list, _warmup, _round, _cpubench_arg):
             print("improved! %f"%(performanceFuzzer.time.prev))
     
     print("%f -> %f : avgtime %f  %f%% faster nop count : %d"%(performanceFuzzer.time.origin, performanceFuzzer.time.min, performanceFuzzer.time.prev, (performanceFuzzer.time.origin-performanceFuzzer.time.min)/performanceFuzzer.time.origin*100, _nop_count))
+    print("Run\n$ python3 -m pytest main.py --benchmark-histogram")
 
 
 
