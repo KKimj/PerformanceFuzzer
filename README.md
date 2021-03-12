@@ -31,17 +31,20 @@ $ deactivate
 
 ## Running the tests
 ```
+$ sudo python3 main.py cpubench cpubench --round=8 --warmup=2 --cpubench=50000
+# same as
+$ sudo python3 main.py cpubench cpubench -r 8 -w 2 -cpu 50000
+
+$ sudo python3 -m pytest main.py --benchmark-histogram
+```
+
+```
 $ ./run.sh cpubench
 $ sudo ./tests/cpubench 50000 --singlethreaded --printdigits
 ```
 
-```
-$ python3 -m pytest main.py --benchmark-histogram
-```
 
-```
-$ sudo python3 main.py cpubench cpubench
-```
+
 
 ## Examples
 
