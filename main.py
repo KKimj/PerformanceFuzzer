@@ -28,27 +28,64 @@ class BenchmarkTime:
         return False
 
 class PerformanceFuzzer:
-    @staticmethod
-    def Insert_Program_Begin():
-        pass
+    def NOP(self):
+        return '  call void asm sideeffect "NOP;", ""()\n'
+
+    def Insert_Program_Begin(self, code, insert_count = 1):
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            file_fuz_ll.write(line)
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            if not insert_flag and line.strip().startswith("define i32 @main"):
+                insert_flag = True
+
+            
+            if insert_flag and insert_count > 0 :
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
     
-    @staticmethod
     def Insert_Program_Last():
         pass
     
-    @staticmethod
+
     def Insert_Program_Random():
         pass
     
-    @staticmethod
+
     def Insert_Lable_Begin():
         pass
     
-    @staticmethod
+
     def Insert_Lable_Last():
         pass
     
-    @staticmethod
+
     def Insert_Lable_Random():
         pass
 
@@ -147,8 +184,7 @@ class PerformanceFuzzer:
         os.system("objdump -D "+ self.filePath + " > " + self.filePath + ".dump")
 
 
-    def NOP(self):
-        return '  call void asm sideeffect "NOP;", ""()\n'
+    
 
     def Insert(self, nop_count = 0):    
         file_opt_ll = open(self.source+"_opt.ll", "r")
