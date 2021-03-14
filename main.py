@@ -60,7 +60,7 @@ class PerformanceFuzzer:
                 insert_flag = True
 
             
-            if insert_flag and insert_count > 0 :
+            while insert_flag and insert_count > 0 :
                 file_fuz_ll.write(code)
                 insert_count -= 1
                 
@@ -70,23 +70,66 @@ class PerformanceFuzzer:
         file_fuz_ll.close()
         os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
     
-    def Insert_Program_Last():
+    def Insert_Program_Last(self, code, insert_count = 1):
         pass
     
 
-    def Insert_Program_Random():
+    def Insert_Program_Random(self, code, insert_count = 1):
         pass
     
 
-    def Insert_Lable_Begin():
+    def Insert_Lable_Begin(self, code, insert_count = 1, label_number = 1):
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            file_fuz_ll.write(line)
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32"):
+            #     insert_flag = True
+
+            if not insert_flag and line.strip().startswith("; <label>"):
+                if label_number > 0:
+                    label_number -= 1
+                    continue
+                else:
+                    insert_flag = True
+            
+            while insert_flag and insert_count > 0:
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
+    
+
+    def Insert_Lable_Last(self, code, insert_count = 1):
         pass
     
 
-    def Insert_Lable_Last():
-        pass
-    
-
-    def Insert_Lable_Random():
+    def Insert_Lable_Random(self, code, insert_count = 1):
         pass
 
     InsertPolicy = [
