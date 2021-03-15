@@ -31,7 +31,7 @@ class PerformanceFuzzer:
     def NOP(self):
         return '  call void asm sideeffect "NOP;", ""()\n'
 
-    def Insert_Program_Begin(self, code, insert_count = 1):
+    def Insert_Program_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10):
         file_opt_ll = open(self.source+"_opt.ll", "r")
         file_fuz_ll = open(self.target+"_opt.ll", "w")
         
@@ -70,15 +70,56 @@ class PerformanceFuzzer:
         file_fuz_ll.close()
         os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
     
-    def Insert_Program_Last(self, code, insert_count = 1):
+    def Insert_Program_Last(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10):
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            
+            if not line:
+                break
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            if not insert_flag and line.strip().startswith("define i32 @main"):
+                insert_flag = True
+
+            
+            while insert_flag and insert_count > 0 and len(line.strip()) == 0 :
+                file_fuz_ll.write(code)
+                insert_count -= 1
+            
+            '''
+            code write 부분을 뒤에
+            '''
+
+            file_fuz_ll.write(line)
+            print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+ 
+
+
+    def Insert_Program_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10):
         pass
     
 
-    def Insert_Program_Random(self, code, insert_count = 1):
-        pass
-    
-
-    def Insert_Lable_Begin(self, code, insert_count = 1, label_number = 1):
+    def Insert_Lable_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, label_number = 1):
+        label_number = (label_number - 1) % self.lable_count + 1
+        
         file_opt_ll = open(self.source+"_opt.ll", "r")
         file_fuz_ll = open(self.target+"_opt.ll", "w")
         
@@ -125,11 +166,53 @@ class PerformanceFuzzer:
 
     
 
-    def Insert_Lable_Last(self, code, insert_count = 1):
-        pass
+    def Insert_Lable_Last(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, label_number = 1):
+        label_number = (label_number - 1) % self.lable_count + 1
+        
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            if not line:
+                break
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32"):
+            #     insert_flag = True
+
+            if not insert_flag and line.strip().startswith("; <label>"):
+                if label_number > 0:
+                    label_number -= 1
+                    continue
+                else:
+                    insert_flag = True
+            
+            while insert_flag and insert_count > 0 and len(line.strip()) == 0:
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+            file_fuz_ll.write(line)
+            
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
     
 
-    def Insert_Lable_Random(self, code, insert_count = 1):
+    def Insert_Lable_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, label_number = 1):
         pass
 
     InsertPolicy = [
@@ -164,6 +247,8 @@ class PerformanceFuzzer:
         self.round = _round
         self.cpubench_arg = " "+str(_cpubench_arg) + " --singlethreaded --printdigits"
         self.time = BenchmarkTime()
+        # TODO 
+        self.lable_count = 10
     
     def updateSource(self): # TODO 3: What is the best name of method?
         os.system('cp '+self.target+'_opt.ll '+self.filePath+'_final.ll')
