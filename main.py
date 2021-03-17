@@ -28,6 +28,46 @@ class BenchmarkTime:
         return False
 
 class PerformanceFuzzer:
+    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000):
+        self.dirName = dirName
+
+        if fileName.endswith('.c'):
+            fileName = fileName[:-2]
+        self.fileName = fileName
+
+        self.filePath = "./tests/"+self.dirName+"/"+self.fileName
+        
+        self.source = self.filePath
+        self.target = self.filePath + testName
+
+        if os.path.isfile(self.filePath+".c") == False:
+            print("File not exist!")
+            quit()
+
+        if os.path.isfile(self.filePath+"_opt.ll") == False:
+            print("Build!")
+            self.Build()
+
+        self.warmup = _warmup
+        self.round = _round
+        self.cpubench_arg = " "+str(_cpubench_arg) + " --singlethreaded --printdigits"
+        self.time = BenchmarkTime()
+
+        '''
+        Counting how many lable are in IR file
+        ''' 
+        self.lable_count = 0
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        while True:
+            line = file_opt_ll.readline()
+            if not line:
+                break
+
+            if line.strip().startswith("; <label>"):
+                self.lable_count += 1
+        file_opt_ll.close()
+
+
     def NOP(self):
         return '  call void asm sideeffect "NOP;", ""()\n'
 
@@ -222,33 +262,6 @@ class PerformanceFuzzer:
         Insert_Lable_Begin,
         Insert_Lable_Last,
         Insert_Lable_Random ]
-
-    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000):
-        self.dirName = dirName
-
-        if fileName.endswith('.c'):
-            fileName = fileName[:-2]
-        self.fileName = fileName
-
-        self.filePath = "./tests/"+self.dirName+"/"+self.fileName
-        
-        self.source = self.filePath
-        self.target = self.filePath + testName
-
-        if os.path.isfile(self.filePath+".c") == False:
-            print("File not exist!")
-            quit()
-
-        if os.path.isfile(self.filePath+"_opt.ll") == False:
-            print("Build!")
-            self.Build()
-
-        self.warmup = _warmup
-        self.round = _round
-        self.cpubench_arg = " "+str(_cpubench_arg) + " --singlethreaded --printdigits"
-        self.time = BenchmarkTime()
-        # TODO 
-        self.lable_count = 10
     
     def updateSource(self): # TODO 3: What is the best name of method?
         os.system('cp '+self.target+'_opt.ll '+self.filePath+'_final.ll')
