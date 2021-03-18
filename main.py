@@ -54,9 +54,12 @@ class PerformanceFuzzer:
         self.time = BenchmarkTime()
 
         '''
-        Counting how many lable are in IR file
+        Counting how many lables are in IR file
+        Counting how many Functions are in IR file
         ''' 
         self.lable_count = 0
+        self.function_count = 0
+        
         file_opt_ll = open(self.source+"_opt.ll", "r")
         while True:
             line = file_opt_ll.readline()
@@ -65,6 +68,10 @@ class PerformanceFuzzer:
 
             if line.strip().startswith("; <label>"):
                 self.lable_count += 1
+
+            if line.strip().startswith("define internal fastcc"):
+                self.function_count += 1
+                
         file_opt_ll.close()
 
 
@@ -155,6 +162,16 @@ class PerformanceFuzzer:
 
     def Insert_Program_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10):
         pass
+
+    def Insert_Function_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
+        pass
+
+    def Insert_Function_Last(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
+        
+
+    def Insert_Function_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
+        pass
+    
     
 
     def Insert_Lable_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, label_number = 1):
