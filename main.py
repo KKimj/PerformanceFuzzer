@@ -20,9 +20,11 @@ def tester_final(benchmark):
 
 def main(filename_list, _warmup, _round, _cpubench_arg):
     if len(filename_list) == 1:
-        performanceFuzzer = PerformanceFuzzer(filename_list[0])
+        performanceFuzzer = PerformanceFuzzer(filename_list[0], verbose=True)
     elif len(filename_list) == 2:
-        performanceFuzzer = PerformanceFuzzer(filename_list[0], filename_list[1])
+        performanceFuzzer = PerformanceFuzzer(filename_list[0], filename_list[1], verbose=True)
+
+    input('Press any key to start')
 
     performanceFuzzer.BenchmarkSetup(_warmup, _round, _cpubench_arg)
     performanceFuzzer.Insert()

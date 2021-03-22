@@ -26,7 +26,7 @@ class BenchmarkTime:
         return False
 
 class PerformanceFuzzer:
-    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000):
+    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000, verbose = False):
         self.dirName = dirName
 
         if fileName.endswith('.c'):
@@ -64,13 +64,18 @@ class PerformanceFuzzer:
             if not line:
                 break
 
+            if line.strip().startswith("define internal fastcc"):
+                self.function_count += 1
+
             if line.strip().startswith("; <label>"):
                 self.lable_count += 1
 
-            if line.strip().startswith("define internal fastcc"):
-                self.function_count += 1
                 
         file_opt_ll.close()
+        if verbose:
+            print("Function count : %d"%(self.function_count))
+            print("Label count : %d"%(self.lable_count))
+            
 
 
     def NOP(self):
@@ -162,10 +167,101 @@ class PerformanceFuzzer:
         pass
 
     def Insert_Function_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
-        pass
+        function_number = (function_number - 1) % self.function_count + 1
+        
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            file_fuz_ll.write(line)
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32"):
+            #     insert_flag = True
+
+            if not insert_flag and line.strip().startswith("define internal fastcc"):
+                if function_number > 0:
+                    function_number -= 1
+                    continue
+                else:
+                    insert_flag = True
+            
+            while insert_flag and insert_count > 0:
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
 
     def Insert_Function_Last(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
-        pass
+        function_number = (function_number - 1) % self.function_count + 1
+        
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32"):
+            #     insert_flag = True
+
+            if not insert_flag and line.strip().startswith("define internal fastcc"):
+                if function_number > 0:
+                    function_number -= 1
+                    continue
+                else:
+                    insert_flag = True
+            
+            while insert_flag and insert_count > 0 and len(line.strip()) == 0:
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+            file_fuz_ll.write(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
 
     def Insert_Function_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
         pass
