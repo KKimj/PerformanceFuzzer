@@ -15,8 +15,8 @@ except(IOError, ImportError):
 
 setuptools.setup (
     name = 'PerformanceFuzzer',
-    version = '0.0.2',
-    license = 'MIT',
+    version = '0.0.3',
+    license = 'GPL-3.0 License',
 
     description = 'PerformanceFuzzer',
     long_description = long_description,
