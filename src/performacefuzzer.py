@@ -167,7 +167,7 @@ class PerformanceFuzzer:
         pass
 
     def Insert_Function_Last(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
-        
+        pass
 
     def Insert_Function_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
         pass
