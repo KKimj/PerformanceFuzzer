@@ -1,6 +1,8 @@
 # PerformanceFuzzer
 PerformanceFuzzer
 
+https://pypi.org/project/PerformanceFuzzer/
+
 ## Getting Started
 ```
 $ git clone https://github.com/KKimj/PerformanceFuzzer
