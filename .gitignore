@@ -1,7 +1,10 @@
 /.vs
 
+*.svg
+*_
 
 /tests/*/*
 !/tests/*/*.c
 !/tests/*/*.cpp
 
+.cache
