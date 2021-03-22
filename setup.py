@@ -1,18 +1,27 @@
 import setuptools
 
-
 install_requires = [
     'numpy',
 ]
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+
+try:
+    # $ pip install pypandoc
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except(IOError, ImportError):
+    long_description = open('README.md').read()
+
 
 setuptools.setup (
     name = 'PerformanceFuzzer',
-    version = '0.0.1',
+    version = '0.0.2',
     license = 'MIT',
+
     description = 'PerformanceFuzzer',
+    long_description = long_description,
+    long_description_content_type='text/markdown',
+
     author = 'KKimj',
     author_email = 'kkimj@hanyang.ac.kr',
     url = 'https://github.com/KKimj/PerformanceFuzzer',
