@@ -3,6 +3,8 @@ import os
 import time
 import numpy
 from src.performancefuzzer import PerformanceFuzzer
+from src.performancefuzzer import BenchmarkTime
+
 
 def tester_original(benchmark):
     # global performanceFuzzer
