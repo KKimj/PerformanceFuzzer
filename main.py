@@ -2,7 +2,7 @@ import argparse
 import os
 import time
 import numpy
-from src.performacefuzzer import PerformanceFuzzer
+from src.performancefuzzer import PerformanceFuzzer
 
 def tester_original(benchmark):
     # global performanceFuzzer
