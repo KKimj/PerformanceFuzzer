@@ -4,6 +4,7 @@ PerformanceFuzzer
 ## Getting Started
 ```
 $ git clone https://github.com/KKimj/PerformanceFuzzer
+$ pip install PerformanceFuzzer
 ```
 
 ### Prerequisites
