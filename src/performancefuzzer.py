@@ -19,9 +19,9 @@ class BenchmarkTime:
         self.prev = _now
     
     def isFaster(self, _min, _max, _now):
-        if self.min is None:
+        if self.now is None:
             return True
-        if self.min > _min:
+        if self.now > _now:
             return True
         return False
 
