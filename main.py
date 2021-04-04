@@ -31,13 +31,14 @@ def main(filename_list, _warmup, _round, _cpubench_arg):
 
     _nop_count = 0
     _improveCount = 0
-    for i in range(10):
+    for i in range(100):
         if performanceFuzzer.Benchmark():
             performanceFuzzer.updateSource()
             _improveCount += 1
             performanceFuzzer.setTarget(str(_improveCount))
             
-            _nop_count = i*50
+            _nop_count = 50
+            
             performanceFuzzer.Insert(_nop_count)
 
             print("improved! %f"%(performanceFuzzer.time.prev))

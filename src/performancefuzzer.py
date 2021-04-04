@@ -166,7 +166,68 @@ class PerformanceFuzzer:
 
 
     def Insert_Program_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10):
-        pass
+        random_line = numpy.random.randint(100) # TODO 100? or 변수?
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            file_fuz_ll.write(line)
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            if not insert_flag and line.strip().startswith("define i32 @main"):
+                insert_flag = True
+
+            
+            while insert_flag and insert_count > 0 :
+                while random_line > 0:
+                    line = file_opt_ll.readline()
+                    file_fuz_ll.write(line)
+                    random_line -= 1
+                    if not line:
+                        insert_flag = False
+
+                    if insert_flag and len(line.strip()) <= 0:
+                        insert_flag = False
+
+                    if insert_flag and line.startswith("}"):
+                        insert_flag = False
+                    
+                    if insert_flag and line.strip().startswith("ret"):
+                        insert_flag = False
+
+                    if insert_flag and line.strip().startswith("br"):
+                        insert_flag = False
+                    
+                    if not insert_flag:
+                        break
+                if not insert_flag:
+                        break
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+    
 
     def Insert_Function_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
         function_number = (function_number - 1) % self.function_count + 1
@@ -266,9 +327,79 @@ class PerformanceFuzzer:
 
 
     def Insert_Function_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, function_number = 1):
-        pass
-    
-    
+        random_line = numpy.random.randint(100) # TODO 100? or 변수?
+
+        function_number = (function_number - 1) % self.function_count + 1
+        
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            file_fuz_ll.write(line)
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32"):
+            #     insert_flag = True
+
+            if not insert_flag and line.strip().startswith("define internal fastcc"):
+                if function_number > 0:
+                    function_number -= 1
+                    continue
+                else:
+                    insert_flag = True
+            
+            while insert_flag and insert_count > 0:
+                while random_line > 0:
+                    line = file_opt_ll.readline()
+                    file_fuz_ll.write(line)
+                    random_line -= 1
+                    if not line:
+                        insert_flag = False
+
+                    if insert_flag and len(line.strip()) <= 0:
+                        insert_flag = False
+
+                    if insert_flag and line.startswith("}"):
+                        insert_flag = False
+                    
+                    if insert_flag and line.strip().startswith("ret"):
+                        insert_flag = False
+
+                    if insert_flag and line.strip().startswith("br"):
+                        insert_flag = False
+                    
+                    if not insert_flag:
+                        break
+
+                if not insert_flag:
+                    break
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            #print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
+
 
     def Insert_Lable_Begin(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, label_number = 1):
         label_number = (label_number - 1) % self.lable_count + 1
@@ -366,7 +497,78 @@ class PerformanceFuzzer:
     
 
     def Insert_Lable_Random(self, code = '  call void asm sideeffect "NOP;", ""()\n', insert_count = 10, label_number = 1):
-        pass
+        random_line = numpy.random.randint(100) # TODO 100? or 변수?
+
+        label_number = (label_number - 1) % self.lable_count + 1
+        
+        file_opt_ll = open(self.source+"_opt.ll", "r")
+        file_fuz_ll = open(self.target+"_opt.ll", "w")
+        
+        insert_flag = False
+        
+        while True:
+            line = file_opt_ll.readline()
+            file_fuz_ll.write(line)
+            if not line:
+                break
+
+            if insert_flag and len(line.strip()) <= 0:
+                continue
+
+            if insert_flag and line.startswith("}"):
+                insert_flag = False
+            
+            if insert_flag and line.strip().startswith("ret"):
+                insert_flag = False
+
+            if insert_flag and line.strip().startswith("br"):
+                insert_flag = False
+            
+
+            # if not insert_flag and line.strip().startswith("define internal fastcc i32"):
+            #     insert_flag = True
+
+            if not insert_flag and line.strip().startswith("; <label>"):
+                if label_number > 0:
+                    label_number -= 1
+                    continue
+                else:
+                    insert_flag = True
+            
+            while insert_flag and insert_count > 0:
+                while random_line > 0:
+                    line = file_opt_ll.readline()
+                    file_fuz_ll.write(line)
+                    random_line -= 1
+                    if not line:
+                        insert_flag = False
+
+                    if insert_flag and len(line.strip()) <= 0:
+                        insert_flag = False
+
+                    if insert_flag and line.startswith("}"):
+                        insert_flag = False
+                    
+                    if insert_flag and line.strip().startswith("ret"):
+                        insert_flag = False
+
+                    if insert_flag and line.strip().startswith("br"):
+                        insert_flag = False
+                    
+                    if not insert_flag:
+                        break
+
+                if not insert_flag:
+                    break
+                file_fuz_ll.write(code)
+                insert_count -= 1
+                
+            print(line)
+
+        file_opt_ll.close()
+        file_fuz_ll.close()
+        os.system("llc "+self.target+"_opt.ll"+" -o " + self.target + "_opt.s" + " && " + "clang "+ self.target+"_opt.s" + " -o " + self.target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ self.target + " > " + self.target + ".dump")
+
 
     InsertPolicy = [
         Insert_Program_Begin,
@@ -401,11 +603,36 @@ class PerformanceFuzzer:
         self.time_now = time.time() - start
         return self.time_now
 
+    def benchmark_nop(self):
+        prev = []
+        now = []
+        best_avg = [None, None] # time, filename
+
+        for policy in self.InsertPolicy:
+            prev.append()
+            pass
+
+        for fuzzer_round in range(self.fuzzing_count):
+
+            # Fuzzing conut 만큼 반복한다.
+
+            # 직전 Fuzzing n개의 결과에 각각 n개의 policy를 적용한다.
+            # n개 중 최적의 결과를 넣는다.
+            # n+1번째는 랜덤 policy를 랜덤하게 적용한 것으로 한다.
+            # n+2번째는 Best 결과를 담는다.
+            prev = now
+            pass
+        pass
+        pass
+
+    def benchmark_padding(self):
+        pass
+
     def is_faster(self):
         pass
 
     def benchmark(self):
-        pass
+        self.benchmark_nop()
     
     def Benchmark(self):
         for i in range(self.warmup):
