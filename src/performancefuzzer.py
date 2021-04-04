@@ -26,7 +26,7 @@ class BenchmarkTime:
         return False
 
 class PerformanceFuzzer:
-    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000, verbose = False):
+    def __init__(self, dirName, fileName = "main", testName = "0", _warmup = 2, _round = 8, _cpubench_arg = 50000, fuzzing_count = 1000,verbose = False):
         self.dirName = dirName
 
         if fileName.endswith('.c'):
@@ -50,6 +50,8 @@ class PerformanceFuzzer:
         self.round = _round
         self.cpubench_arg = " "+str(_cpubench_arg) + " --singlethreaded --printdigits"
         self.time = BenchmarkTime()
+
+        self.fuzzing_count = fuzzing_count
 
         '''
         Counting how many lables are in IR file
@@ -399,6 +401,12 @@ class PerformanceFuzzer:
         self.time_now = time.time() - start
         return self.time_now
 
+    def is_faster(self):
+        pass
+
+    def benchmark(self):
+        pass
+    
     def Benchmark(self):
         for i in range(self.warmup):
             self.Run()

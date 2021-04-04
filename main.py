@@ -54,6 +54,8 @@ def get_arguments():
     parser.add_argument('--warmup', '-w', nargs=None, type=int , default = 1, help='warmup before benchmark')
     parser.add_argument('--round', '-r', nargs=None, type=int, default = 4, help='number of running test')
     parser.add_argument('--cpubench', '-cpu', nargs=None, type=int, default = 50000, help='argument for cpubench')
+    parser.add_argument('--fuzzingcount', '-fcnt', nargs=None, type=int, default = 1000, help='argument for fuzzing count')
+    
 
 
     filename_list = parser.parse_args().filename
