@@ -8,8 +8,27 @@ class InsertPolicy:
     def __init__(self):
         pass
     
-    # Static method ?
-    def insert(self):
+    @staticmethod
+    def insert(source, target):
+        #parameter handling
+        if source.endswith('.ll'):
+            source = source[:-3]
+        if target.endswith('.ll'):
+            target = target[:-3]
+        
+        # file load
+        source_file = open(source+".ll", "r")
+        target_file = open(target+".ll", "w")
+
+        # insertion
+
+        # close file
+        source_file.close()
+        target_file.close()
+
+        # file build
+        os.system("llc "+target+".ll"+" -o " + target + ".s" + " && " + "clang "+ target+".s" + " -o " + target + " -fopenmp=libiomp5 -lgmp -lssl -lcrypto" + " && " + "objdump -D "+ target + " > " + target + ".dump")
+
         pass
 
     pass
