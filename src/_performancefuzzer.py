@@ -7,6 +7,26 @@ class BenchmarkTime:
 class InsertPolicy:
     def __init__(self):
         pass
+
+    @staticmethod
+    def data_padding():
+        # data memory area
+
+        # Globla memory
+
+        # Stack memory
+        pass
+
+    @staticmethod
+    def instruction_padding():
+        # code memory area
+        
+        # Program level
+
+        # Function level
+
+        # Lable level
+        pass
     
     @staticmethod
     def insert(source, target):
@@ -19,6 +39,8 @@ class InsertPolicy:
         # file load
         source_file = open(source+".ll", "r")
         target_file = open(target+".ll", "w")
+
+        # parsing
 
         # insertion
 
