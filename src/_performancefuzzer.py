@@ -71,8 +71,12 @@ class PerformanceFuzzer:
         pass
 
     # configure to Setup benchmark, insert policy
-    def configure(self):
-        pass
+    def configure(self, warmup = 2, round = 5, iteration = 5):
+        self.config = {
+            'round' : round,
+            'warmup' : warmup,
+            'iteration' : iteration,
+        }
 
     # run, fuzzing
     def run(self):
