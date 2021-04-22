@@ -6,6 +6,7 @@
 /tests/*/*
 !/tests/*/*.c
 !/tests/*/*.cpp
+!/tests/cpubench/cpubench.ll
 
 .cache
 
