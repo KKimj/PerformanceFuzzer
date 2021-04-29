@@ -3,6 +3,9 @@ class BenchmarkTime:
         pass
     pass
 
+class IRPaser():
+    pass
+
 # IR Code insert policy
 class InsertPolicy:
     def __init__(self):
