@@ -44,6 +44,9 @@ $ clang {target_file.s} -o {target_file} {Clang_compile_option}
 
 # optional : Dump executable file
 $ objdump -D {target_file} > {target_file.dump}
+
+# example from test.c
+$ opt -S -O2 -aa -basicaa -tbaa -licm test.ll -o test_opt.ll && llc test_opt.ll -o test.s && clang test.s -o test  -fopenmp=libiomp5 -lgmp -lssl -lcrypto
 ```
 
 
