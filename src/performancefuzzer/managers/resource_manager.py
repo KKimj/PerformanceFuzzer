@@ -1,2 +1,4 @@
 class ResourceManager:
-    pass
+    def __init__(self) -> None:
+        self.scheduler = None
+        
