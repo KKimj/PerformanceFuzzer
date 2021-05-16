@@ -1,6 +1,9 @@
 class IRModel:
     def __init__(self) -> None:
         self.scope = Scope()
+        self.source_name = 'test.ll'
+        self.target_name = 'test.ll'
+        
 
 
 class Scope:
