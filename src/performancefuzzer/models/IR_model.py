@@ -3,6 +3,12 @@ class IRModel:
         self.scope = Scope()
         self.source_name = 'test.ll'
         self.target_name = 'test.ll'
+
+    def profile(self):
+        # program -> line numbers
+        # [ function -> line numbers ]
+        # [ lable -> line numbers ]
+        pass
         
 
 
