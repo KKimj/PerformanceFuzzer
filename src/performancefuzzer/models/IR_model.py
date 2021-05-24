@@ -1,4 +1,4 @@
-class IRModel:
+class IR:
     def __init__(self) -> None:
         self.scope = Scope()
         self.source_name = 'test.ll'

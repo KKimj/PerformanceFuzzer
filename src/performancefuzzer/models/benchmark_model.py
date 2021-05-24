@@ -1,4 +1,4 @@
-class BenchmarkModel:
+class Benchmark:
     def __init__(self) -> None:
         self.task_clock = None
         self.context_switches = None
