@@ -6,6 +6,7 @@
 /tests/*/*
 !/tests/*/*.c
 !/tests/*/*.cpp
+!/tests/cpubench/cpubench.ll
 
 .cache
 
@@ -138,3 +139,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+tmp.tmp
+tmp2.tmp
+tmp1.tmp
+perf.data
+Pipfile.lock
+Pipfile

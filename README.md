@@ -31,6 +31,24 @@ $ pip3 install pygal
 
 $ deactivate
 ```
+## LLVM
+```
+# .c file to .ll
+$ clang -S -emit-llvm {source_file.c} -o {target_file.ll}
+
+# .ll file optimization & .ll file to .S file
+$ opt -S -O2 -aa -basicaa -tbaa -licm {target_file.ll}
+
+# .S file compile to executable file
+$ clang {target_file.s} -o {target_file} {Clang_compile_option}
+
+# optional : Dump executable file
+$ objdump -D {target_file} > {target_file.dump}
+
+# example from test.c
+$ opt -S -O2 -aa -basicaa -tbaa -licm test.ll -o test_opt.ll && llc test_opt.ll -o test.s && clang test.s -o test  -fopenmp=libiomp5 -lgmp -lssl -lcrypto
+```
+
 
 ## Running the tests
 ```
