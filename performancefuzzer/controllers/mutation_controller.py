@@ -1,3 +1,5 @@
+from models.mutation_model import Mutation
+
 class MutationController:
     def __init__(self) -> None:
         pass

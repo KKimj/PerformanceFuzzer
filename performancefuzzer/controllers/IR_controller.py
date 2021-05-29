@@ -1,10 +1,10 @@
-from src.performancefuzzer.models.IR_model import IRModel
+from models.IR_model import IR
 
 import os
 
 class IRController:
     def __init__(self) -> None:
-        self.IR = IRModel()
+        self.IR = IR()
 
     def build(self):
         # return excutable_file_name
@@ -16,7 +16,7 @@ class IRController:
     def insert(self):
         pass
 
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
+    def __call__(self, *args, **kwds) -> None:
         # self.insert()
         # self.build()
         pass

@@ -1,5 +1,5 @@
 import os
-from performancefuzzer.models.benchmark_model import Benchmark
+from models.benchmark_model import Benchmark
 
 class BenchmarkController:
     def __init__(self, verbos = 1) -> None:

@@ -1,5 +1,5 @@
 class ResourceManager:
-    def __init__(self, source) -> None:
+    def __init__(self, source = None) -> None:
         self.scheduler = None
         self.source = source
 

@@ -29,8 +29,8 @@ setuptools.setup (
     install_requires=install_requires,
 
     py_modules=["performancefuzzer"],
-    package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src"),
+    package_dir={"": "performancefuzzer"},
+    packages=setuptools.find_packages(where="performancefuzzer"),
     classifiers = [
         # https://pypi.org/classifiers/
         "Programming Language :: Python :: 3",
