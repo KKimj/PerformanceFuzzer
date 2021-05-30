@@ -124,7 +124,6 @@ static __inline__ char *clc_pi(unsigned long dgts)
 {
     /* Compute required iterations */
     unsigned long iters = (dgts / 15) + 1;
-Chudnovsky
     constant2 = 13591409;
     constant3 = 640320;
     bits = clc_log2(10);
@@ -138,7 +137,6 @@ Chudnovsky
 
     /* Get high-res time */
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-Chudnovsky
     /* Iterate and compute value using Chudnovsky Algorithm */
     for (i = 0x0; i < iters; i++)
     {
