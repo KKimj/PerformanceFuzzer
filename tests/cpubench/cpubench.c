@@ -124,6 +124,9 @@ static __inline__ char *clc_pi(unsigned long dgts)
 {
     /* Compute required iterations */
     unsigned long iters = (dgts / 15) + 1;
+
+    /* Initialize variables */
+    constant1 = 545140134;
     constant2 = 13591409;
     constant3 = 640320;
     bits = clc_log2(10);
@@ -137,6 +140,10 @@ static __inline__ char *clc_pi(unsigned long dgts)
 
     /* Get high-res time */
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
+    /* Print total iterations and start computation of digits */
+    printf("Total iterations: %lu\n\n", iters - 1);
+
     /* Iterate and compute value using Chudnovsky Algorithm */
     for (i = 0x0; i < iters; i++)
     {
