@@ -7,6 +7,7 @@
 !/tests/*/*.c
 !/tests/*/*.cpp
 !/tests/cpubench/cpubench.ll
+!/tests/helloworld/main.ll
 
 .cache
 
