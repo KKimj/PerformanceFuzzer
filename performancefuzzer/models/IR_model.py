@@ -1,32 +1,22 @@
 class IR:
-    def __init__(self, path, source_name, target_name, compile_options, execute_arguments) -> None:
-        self.path = path
-        self.source = path + source_name
-        self.target = path + target_name
-        self.compile_options = compile_options
-        self.execute_arguments = execute_arguments
+    def __init__(self) -> None:
+        self.scope = Scope()
+        self.source_name = 'test.ll'
+        self.target_name = 'test.ll'
 
-        self.map = {
-            'path' : self.path,
+    def profile(self):
+        # program -> line numbers
+        # [ function -> line numbers ]
+        # [ lable -> line numbers ]
+        pass
+        
 
-            'source' : self.source,
-            'source_c' : self.source+'.c',
-            'source_ll' : self.source+'.ll',
-            'source_s' : self.source+'.s',
 
-            'target' : self.target,
-            'target_c' : self.target+'.c',
-            'target_ll' : self.target+'.ll',
-            'target_s' : self.target+'.s',
+class Scope:
+    def __init__(self):
+        self.scope = {'global' : False, 'function' : False, 'label' : False }
 
-            'compile_options' : self.compile_options,
-            'execute_arguments' : self.execute_arguments, 
+if __name__ == '__main__':
+    s1 = Scope()
 
-            'functions_num' : 0,
-            'functions' : [
-                # {
-                #     'name' : '',
-                #     'labels_num' : 0,
-                # },
-            ],
-        }
+    print(s1.scope)
