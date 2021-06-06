@@ -35,4 +35,10 @@ if __name__ == '__main__':
     resource_manager = ResourceManager()
 
     IR_controller.profiling()
+    IR_controller.append(label_num = 4, code_count = 4)
+    IR_controller.insert(label_num = 4, code_count = 4)
+    IR_controller.insert(label_num = 0, code_count = 2)
+
+
+    
     

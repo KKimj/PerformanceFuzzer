@@ -88,7 +88,8 @@ class IRController:
 
                 self.map['functions'].append({
                     'name' : '',
-                    'labels_num' : 0,
+                    'labels_num' : 1,
+                    # label start with 1, functions block treat as a label
                 })
                 self.map['functions_num'] += 1
                 self.map['functions'][-1]['name'] = functions_name
@@ -107,16 +108,62 @@ class IRController:
         for function in functions:
             print(function)
 
-    def insert(self):
-        pass
+    def insert(self, code = 'call void asm sideeffect "NOP;", ""()\n', function_num = 0, label_num = 0, code_count = 1):
+        
+        function_num %= self.map['functions_num']
+        label_num %= self.map['functions'][function_num]['labels_num']
+
+        lines = self.readlines()
+        for index, line in enumerate(lines):
+            # funtions
+            if line.find('define') >= 0:
+                function_num -= 1
+                label_num -= 1
+                continue
+
+            # labels
+            elif line.find('<label>') >= 0 and function_num == -1:
+                label_num -= 1
+
+            elif label_num == -1 and function_num == -1:
+                lines.insert(index, code*code_count)
+                break
+        
+        self.write(lines)
+
+
+    def append(self, code = 'call void asm sideeffect "NOP;", ""()\n', function_num = 0, label_num = 0, code_count = 1):
+        function_num %= self.map['functions_num']
+        label_num %= self.map['functions'][function_num]['labels_num']
+        label_num += 1
+
+        lines = self.readlines()
+        for index, line in enumerate(lines):
+            # funtions
+            if line.find('define') >= 0:
+                function_num -= 1
+                label_num -= 1
+                continue
+
+            # labels
+            elif (line.find('<label>') >= 0 or line.find('}') >= 0) and function_num == -1:
+                label_num -= 1
+
+            if label_num == -1 and function_num == -1:
+                lines.insert(index, code*code_count)
+                break
+        
+        self.write(lines)
+
+
 
     def read(self):
-        cat_command = 'cat {source_ll}'.format_map(self.map)
+        cat_command = 'cat {target_ll}'.format_map(self.map)
         line = os.popen(cat_command).read()
         return line
 
     def readlines(self):
-        cat_command = 'cat {source_ll}'.format_map(self.map)
+        cat_command = 'cat {target_ll}'.format_map(self.map)
         lines = os.popen(cat_command).readlines()
         return lines
 
