@@ -24,6 +24,7 @@ if __name__ == '__main__':
     print('performance fuzzer')
     benchmark_controller = BenchmarkController()
     
+    # IR controller
     IR_controller = IRController(
         path = '/home/kkimj/PerformanceFuzzer/tests/helloworld/',
         source_name = 'main.c', target_name = 'main_opt', compile_options = '', execute_arguments = '',)
@@ -33,7 +34,8 @@ if __name__ == '__main__':
     mutation_controller = MutationController()
 
     resource_manager = ResourceManager()
-
+    
+    # IR controller
     IR_controller.profiling()
     IR_controller.append(label_num = 4, code_count = 4)
     IR_controller.insert(label_num = 4, code_count = 4)
