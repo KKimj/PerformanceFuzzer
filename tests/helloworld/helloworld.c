@@ -9,4 +9,5 @@ void print_hello_world()
     {
         printf("%d :%s\n", i, message);
     }
+    return;
 }
