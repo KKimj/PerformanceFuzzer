@@ -8,6 +8,8 @@
 !/tests/*/*.cpp
 !/tests/cpubench/cpubench.ll
 !/tests/helloworld/main.ll
+!/tests/helloworld/helloworld.ll
+
 
 .cache
 
