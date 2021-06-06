@@ -8,42 +8,15 @@ class IRController:
             path = '/home/kkimj/PerformanceFuzzer/tests/cpubench/',
             source_name = 'cpubench.c',
             target_name = 'cpubench_opt',
-            compile_option = '-fopenmp=libiomp5 -lgmp -lssl -lcrypto',
+            compile_options = '-fopenmp=libiomp5 -lgmp -lssl -lcrypto',
             execute_arguments = ' 50000 --singlethreaded --printdigits',
             ) -> None:
 
-        self.IR = IR()
-
-        self.path = path
-        
         source_name = source_name[:-2] if source_name.endswith('.c') else source_name
         target_name = source_name if target_name is None else target_name
 
-        self.source = self.path + source_name
-        self.target = self.path + target_name
-
-        self.map = {
-            'source' : self.source,
-            'source_c' : self.source+'.c',
-            'source_ll' : self.source+'.ll',
-            'source_s' : self.source+'.s',
-
-            'target' : self.target,
-            'target_c' : self.target+'.c',
-            'target_ll' : self.target+'.ll',
-            'target_s' : self.target+'.s',
-
-            'compile_option' : compile_option,
-            'execute_arguments' : execute_arguments, 
-
-            'functions_num' : 0,
-            'functions' : [
-                # {
-                #     'name' : '',
-                #     'labels_num' : 0,
-                # },
-            ],
-        }
+        self.IR = IR(path = path, source_name = source_name, target_name = target_name, compile_options = compile_options, execute_arguments = execute_arguments)
+        self.map = self.IR.map
 
 
     def build(self) -> str:

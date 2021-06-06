@@ -26,7 +26,7 @@ if __name__ == '__main__':
     
     IR_controller = IRController(
         path = '/home/kkimj/PerformanceFuzzer/tests/helloworld/',
-        source_name = 'main.c', target_name = 'main_opt', compile_option = '', execute_arguments = '',)
+        source_name = 'main.c', target_name = 'main_opt', compile_options = '', execute_arguments = '',)
 
     IR_controller = IRController()
     
