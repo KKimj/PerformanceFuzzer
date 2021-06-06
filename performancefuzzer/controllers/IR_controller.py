@@ -8,7 +8,9 @@ class IRController:
             path = '/home/kkimj/PerformanceFuzzer/tests/cpubench/',
             source_name = 'cpubench.c',
             target_name = 'cpubench_opt',
-            compile_option = '-fopenmp=libiomp5 -lgmp -lssl -lcrypto',) -> None:
+            compile_option = '-fopenmp=libiomp5 -lgmp -lssl -lcrypto',
+            execute_arguments = ' 50000 --singlethreaded --printdigits',
+            ) -> None:
 
         self.IR = IR()
 
@@ -32,7 +34,15 @@ class IRController:
             'target_s' : self.target+'.s',
 
             'compile_option' : compile_option,
-            'execute_arguments' : ' 50000 --singlethreaded --printdigits' 
+            'execute_arguments' : execute_arguments, 
+
+            'functions_num' : 0,
+            'functions' : [
+                # {
+                #     'name' : '',
+                #     'labels_num' : 0,
+                # },
+            ],
         }
 
 
@@ -66,9 +76,36 @@ class IRController:
         # clang -S -emit-llvm {source_file.c} -o {target_file.ll}
         clang_command = 'clang -S -emit-llvm {source_c} -o {target_ll}'.format_map(self.map)
         os.system(clang_command)
+        
+        lines = self.readlines()
+        for line in lines:
+            # funtions
+            if line.find('define') >= 0:
+                # define i32 @main(i32, i8**) #0 {
+                function_name_start_idx = line.find('@') + 1
+                function_name_end_idx = line.find('(')
+                functions_name = line[function_name_start_idx:function_name_end_idx]
 
+                self.map['functions'].append({
+                    'name' : '',
+                    'labels_num' : 0,
+                })
+                self.map['functions_num'] += 1
+                self.map['functions'][-1]['name'] = functions_name
 
-        pass
+            # labels
+            if line.find('<label>') >= 0:
+                # ; <label>:26:                                     ; preds = %2
+                # print(line)
+                self.map['functions'][-1]['labels_num'] += 1
+
+        # results
+        profile_result = 'functions num : {functions_num}'.format_map(self.map)
+        print(profile_result)
+
+        functions = self.map['functions']
+        for function in functions:
+            print(function)
 
     def insert(self):
         pass
