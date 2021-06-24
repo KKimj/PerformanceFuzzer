@@ -3,24 +3,22 @@ import subprocess
 from models.benchmark_model import Benchmark
 
 class BenchmarkController:
-    def __init__(self, command='', verbos = 1) -> None:
+    def __init__(self, command = '', round_num = 5, verbos = 1) -> None:
         self.benchmark = Benchmark()
-        self.verbos = verbos
+        
         self.command = command
-        self.command = './tests/cpubench/cpubench 50000 --singlethreaded --printdigits > tmp.tmp'
-        # self.command = 'pwd'
+        self.round_num = round_num
+        self.verbos = verbos
 
     def perf(self) -> dict:
-        self.perf_command = 'sudo perf stat -r 5  2>&1'
-        # self.perf_command = 'sudo perf stat 2>&1'
-        # self.perf_command = 'sudo perf stat -r 2'
-        # self.perf_command = 'sudo perf stat -e cycles,instructions,cache-references,cache-misses,bus-cycles -a'
-        
+        self.perf_command = 'sudo perf stat -r {round} 2>&1'.format(round = self.round_num)
+ 
         task_clock, CPUs_utilized, context_switches, cpu_migrations, page_faults, cycles, instructions, branches, branch_misses, time, user_time, sys_time = tuple([-1] * 12)
 
-        popen = os.popen(self.perf_command+' '+self.command)
-        # result = popen.read()
+        command = self.perf_command + ' ' + self.command
+        popen = os.popen(command)
         lines = popen.readlines()
+
         for line in lines:
             if self.verbos == 3:
                 print(line)
@@ -59,14 +57,12 @@ class BenchmarkController:
             if line.find('time') >= 0:
                 time = float(values[0].replace(',', ''))
 
-                
             if line.find('sys') >= 0:
                 sys_time = float(values[0].replace(',', ''))
 
             if line.find('user') >= 0:
                 user_time = float(values[0].replace(',', ''))
             
-              
 
         results = {
             'task_clock' : task_clock,
@@ -132,7 +128,7 @@ class BenchmarkController:
         return self.benchmark.time
 
 if __name__ == '__main__':
-    benchmarkController = BenchmarkController(verbos=3)
+    benchmarkController = BenchmarkController(command='/home/kkimj/PerformanceFuzzer/tests/cpubench/cpubench 50000 --singlethreaded --printdigits > tmp.tmp', verbos=3)
     benchmarkController.perf()
     print(benchmarkController.toJson())
     print(benchmarkController.time)
